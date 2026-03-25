@@ -13,6 +13,9 @@ public sealed class Email
     public string Address { get; }
 
     private Email(string address) => Address = address;
+
+    public static Email FromStorage(string raw) => new(raw);
+
     public static Email Create(string address)
     {
         if (string.IsNullOrWhiteSpace(address))

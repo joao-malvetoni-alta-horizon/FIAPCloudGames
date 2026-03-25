@@ -30,6 +30,6 @@ public class UserGameLibraryConfiguration : IEntityTypeConfiguration<UserGameLib
         builder.HasOne(ugl => ugl.Game)
                .WithMany()
                .HasForeignKey(ugl => ugl.GameId)
-               .OnDelete(DeleteBehavior.Cascade);
+               .OnDelete(DeleteBehavior.Restrict);
     }
 }

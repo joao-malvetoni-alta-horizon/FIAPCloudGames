@@ -19,17 +19,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries<Domain.Shared.Entity>())
+        foreach (var entry in ChangeTracker.Entries<Domain.Shared.Entity>()
+            .Where(e => e.State == EntityState.Modified))
         {
-            switch (entry.State)
-            {
-                case EntityState.Added:
-                    entry.Property(nameof(Domain.Shared.Entity.CreatedAt)).CurrentValue = DateTime.UtcNow;
-                    break;
-                case EntityState.Modified:
-                    entry.Property(nameof(Domain.Shared.Entity.UpdatedAt)).CurrentValue = DateTime.UtcNow;
-                    break;
-            }
+            entry.Property(nameof(Domain.Shared.Entity.UpdatedAt)).CurrentValue = DateTime.UtcNow;
         }
 
         return await base.SaveChangesAsync(cancellationToken);

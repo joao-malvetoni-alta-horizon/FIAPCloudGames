@@ -9,6 +9,6 @@ public class RoleRepository(AppDbContext context) : RepositoryBase<Role>(context
 {
     public async Task<Role?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
         => await DbSet.FirstOrDefaultAsync(
-            r => r.Name.ToLower() == name.ToLower(),
+            r => EF.Functions.ILike(r.Name, name),
             cancellationToken);
 }

@@ -23,7 +23,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                .IsRequired()
                .HasConversion(
                    email => email.Address,
-                   raw => Email.Create(raw));
+                   raw => Email.FromStorage(raw));
 
         builder.HasIndex(u => u.Email).IsUnique();
 
