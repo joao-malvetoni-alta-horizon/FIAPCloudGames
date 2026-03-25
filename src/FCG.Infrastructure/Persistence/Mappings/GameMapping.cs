@@ -1,5 +1,4 @@
 using FCG.Domain.Games.Entities;
-using FCG.Domain.Games.Enums;
 using FCG.Domain.Games.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

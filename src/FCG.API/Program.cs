@@ -18,10 +18,7 @@ builder.Services.AddSwaggerConfig();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwaggerConfig();
-}
+if (app.Environment.IsDevelopment()) app.UseSwaggerConfig();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
@@ -32,7 +29,6 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var retries = 10;
     for (var i = 0; i < retries; i++)
-    {
         try
         {
             db.Database.Migrate();
@@ -40,10 +36,10 @@ using (var scope = app.Services.CreateScope())
         }
         catch (Exception ex) when (i < retries - 1)
         {
-            app.Logger.LogWarning(ex, "Database not ready yet, retrying in 3s... ({Attempt}/{MaxRetries})", i + 1, retries);
+            app.Logger.LogWarning(ex, "Database not ready yet, retrying in 3s... ({Attempt}/{MaxRetries})", i + 1,
+                retries);
             Thread.Sleep(3000);
         }
-    }
 }
 
 app.Run();

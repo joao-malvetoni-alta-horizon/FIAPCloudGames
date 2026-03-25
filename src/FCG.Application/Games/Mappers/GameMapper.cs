@@ -5,8 +5,9 @@ namespace FCG.Application.Games.Mappers;
 
 internal static class GameMapper
 {
-    public static GameResponse ToResponse(Game game) =>
-        new(
+    public static GameResponse ToResponse(Game game)
+    {
+        return new GameResponse(
             game.Id,
             game.Title.Value,
             game.Description,
@@ -16,4 +17,5 @@ internal static class GameMapper
             game.ReleaseDate,
             game.CreatedAt,
             game.UpdatedAt);
+    }
 }

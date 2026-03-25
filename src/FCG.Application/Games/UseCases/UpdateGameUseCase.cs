@@ -14,12 +14,12 @@ public class UpdateGameUseCase(IGameRepository repository) : IUpdateGameUseCase
                    ?? throw new GameNotFoundException(id);
 
         game.Update(
-            title: request.Title,
-            description: request.Description,
-            price: request.Price,
-            genre: request.Genre,
-            releaseDate: request.ReleaseDate,
-            status: request.Status);
+            request.Title,
+            request.Description,
+            request.Price,
+            request.Genre,
+            request.ReleaseDate,
+            request.Status);
 
         await repository.UpdateAsync(game, ct);
 
