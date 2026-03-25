@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16
+    container_name: fcg_postgres
+    environment:
+      POSTGRES_DB: fcgdb
+      POSTGRES_USER: fcg
+      POSTGRES_PASSWORD: fcg123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fcg -d fcgdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: src/FCG.API/Dockerfile
+    container_name: fcg_api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=fcgdb;Username=fcg;Password=fcg123"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
