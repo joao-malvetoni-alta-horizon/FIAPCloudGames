@@ -4,7 +4,6 @@ using FCG.Domain.Users.Exceptions;
 
 namespace FCG.Domain.Users.Entities;
 
-/// <summary>Representa uma entrada na biblioteca de jogos de um usuário — um jogo que ele adquiriu.</summary>
 public class UserGameLibrary : Entity
 {
     public Guid UserId { get; private set; }
@@ -14,8 +13,6 @@ public class UserGameLibrary : Entity
 
     public User? User { get; private set; }
     public Game? Game { get; private set; }
-
-    /// <summary>Exigido pelo EF Core.</summary>
     protected UserGameLibrary() { }
 
     private UserGameLibrary(Guid userId, Guid gameId, decimal pricePaid) : base()
@@ -25,12 +22,6 @@ public class UserGameLibrary : Entity
         PricePaid = pricePaid;
         AcquiredAt = DateTime.UtcNow;
     }
-
-    /// <summary>Cria uma nova entrada na biblioteca.</summary>
-    /// <param name="userId">Id do usuário que está adquirindo o jogo.</param>
-    /// <param name="gameId">Id do jogo adquirido.</param>
-    /// <param name="pricePaid">Preço pago no momento da aquisição (>= 0).</param>
-    /// <exception cref="UserDomainException">Lançada em caso de entrada inválida.</exception>
     public static UserGameLibrary Create(Guid userId, Guid gameId, decimal pricePaid)
     {
         if (userId == Guid.Empty)

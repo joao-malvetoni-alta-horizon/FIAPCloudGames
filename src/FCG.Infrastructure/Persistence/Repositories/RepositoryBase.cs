@@ -1,11 +1,9 @@
 using FCG.Domain.Shared;
-using FCG.Domain.Users.Interfaces;
 using FCG.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure.Persistence.Repositories;
 
-/// <summary>Repositório base genérico do EF Core que implementa <see cref="IRepository{T}"/>.</summary>
 public abstract class RepositoryBase<T>(AppDbContext context) : IRepository<T>
     where T : Entity
 {

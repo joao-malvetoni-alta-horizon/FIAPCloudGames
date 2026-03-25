@@ -1,4 +1,5 @@
 using FCG.Domain.Users.Entities;
+using FCG.Domain.Shared;
 
 namespace FCG.Domain.Users.Interfaces;
 

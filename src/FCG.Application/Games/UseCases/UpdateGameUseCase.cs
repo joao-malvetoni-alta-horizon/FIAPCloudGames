@@ -3,10 +3,11 @@ using FCG.Application.Games.Interfaces;
 using FCG.Application.Games.Mappers;
 using FCG.Domain.Games.Exceptions;
 using FCG.Domain.Games.Interfaces;
+using FCG.Domain.Shared;
 
 namespace FCG.Application.Games.UseCases;
 
-public class UpdateGameUseCase(IGameRepository repository) : IUpdateGameUseCase
+public class UpdateGameUseCase(IGameRepository repository, IUnitOfWork unitOfWork) : IUpdateGameUseCase
 {
     public async Task<GameResponse> ExecuteAsync(Guid id, UpdateGameRequest request, CancellationToken ct = default)
     {
@@ -21,7 +22,8 @@ public class UpdateGameUseCase(IGameRepository repository) : IUpdateGameUseCase
             request.ReleaseDate,
             request.Status);
 
-        await repository.UpdateAsync(game, ct);
+        repository.Update(game);
+        await unitOfWork.CommitAsync(ct);
 
         return GameMapper.ToResponse(game);
     }

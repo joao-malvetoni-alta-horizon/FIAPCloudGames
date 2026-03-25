@@ -7,8 +7,6 @@ namespace FCG.Infrastructure.Persistence.Context;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Game> Games => Set<Game>();
-
-    // === MODELAGEM DE DADOS — EF Core 10 ===
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserGameLibrary> UserGameLibrary => Set<UserGameLibrary>();

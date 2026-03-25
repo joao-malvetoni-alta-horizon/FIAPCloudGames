@@ -1,6 +1,7 @@
 using FCG.Application.Games.Interfaces;
 using FCG.Application.Games.UseCases;
 using FCG.Domain.Games.Interfaces;
+using FCG.Domain.Shared;
 using FCG.Domain.Users.Interfaces;
 using FCG.Infrastructure.Persistence;
 using FCG.Infrastructure.Persistence.Context;
@@ -19,8 +20,6 @@ public static class InfrastructureServiceExtensions
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-
-        // Casos de uso de jogos (existentes)
         services.AddScoped<IGameRepository, GameRepository>();
 
         services.AddScoped<ICreateGameUseCase, CreateGameUseCase>();
@@ -28,17 +27,12 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IListGamesUseCase, ListGamesUseCase>();
         services.AddScoped<IUpdateGameUseCase, UpdateGameUseCase>();
         services.AddScoped<IDeleteGameUseCase, DeleteGameUseCase>();
-
-        // === MODELAGEM DE DADOS — EF Core 10 ===
-        // Repositórios do domínio de usuário
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserGameLibraryRepository, UserGameLibraryRepository>();
-
-        // Unidade de Trabalho
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        // Serviço de hash de senha
+        services.AddScoped<UnitOfWork>();
+        services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<UnitOfWork>());
+        services.AddScoped<IUserUnitOfWork>(provider => provider.GetRequiredService<UnitOfWork>());
         services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
 
         return services;

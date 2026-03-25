@@ -2,19 +2,10 @@ using FCG.Domain.Users.Exceptions;
 
 namespace FCG.Domain.Users.ValueObjects;
 
-/// <summary>
-/// Validador de senha exclusivo do domínio. Aplica regras de complexidade sem realizar hashing.
-/// O hashing (BCrypt) é responsabilidade de <c>IPasswordHasher</c> na camada de Infraestrutura.
-/// </summary>
 public static class Password
 {
     private const int MinLength = 8;
     private const string SpecialChars = "!@#$%^&*()-_+=";
-
-    /// <summary>
-    /// Valida que <paramref name="plainText"/> atende aos requisitos de complexidade.
-    /// </summary>
-    /// <exception cref="UserDomainException">Lançada quando alguma regra é violada.</exception>
     public static void Validate(string plainText)
     {
         if (string.IsNullOrEmpty(plainText))

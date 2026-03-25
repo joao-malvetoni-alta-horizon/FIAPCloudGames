@@ -3,10 +3,6 @@ using FCG.Domain.Users.Exceptions;
 
 namespace FCG.Domain.Users.ValueObjects;
 
-/// <summary>
-/// Value object imutável que representa um endereço de e-mail validado.
-/// Lança <see cref="UserDomainException"/> em caso de entrada inválida.
-/// </summary>
 public sealed class Email
 {
     private static readonly Regex _regex = new(
@@ -17,10 +13,6 @@ public sealed class Email
     public string Address { get; }
 
     private Email(string address) => Address = address;
-
-    /// <summary>Cria uma instância de <see cref="Email"/> validada.</summary>
-    /// <param name="address">O endereço de e-mail bruto.</param>
-    /// <exception cref="UserDomainException">Lançada quando o endereço é nulo, vazio ou possui formato inválido.</exception>
     public static Email Create(string address)
     {
         if (string.IsNullOrWhiteSpace(address))

@@ -2,22 +2,19 @@ using FCG.Domain.Games.Enums;
 using FCG.Domain.Games.Events;
 using FCG.Domain.Games.Exceptions;
 using FCG.Domain.Games.ValueObjects;
+using FCG.Domain.Shared;
 
 namespace FCG.Domain.Games.Entities;
 
-public class Game
+public class Game : Entity
 {
     private readonly List<object> _domainEvents = [];
-
-    public Guid Id { get; private set; }
     public GameTitle Title { get; private set; } = null!;
     public string Description { get; private set; } = string.Empty;
     public Price Price { get; private set; } = null!;
     public GameGenre Genre { get; private set; }
     public GameStatus Status { get; private set; }
     public DateOnly ReleaseDate { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime? UpdatedAt { get; private set; }
 
     public IReadOnlyCollection<object> DomainEvents => _domainEvents.AsReadOnly();
 
@@ -36,14 +33,12 @@ public class Game
         if (description?.Length > 2000)
             throw new DomainValidationException("Description cannot exceed 2000 characters.");
 
-        Id = Guid.NewGuid();
         Title = new GameTitle(title);
         Description = description ?? string.Empty;
         Price = new Price(price);
         Genre = genre;
         Status = GameStatus.Active;
         ReleaseDate = releaseDate;
-        CreatedAt = DateTime.UtcNow;
 
         _domainEvents.Add(new GameCreatedEvent(Id, Title.Value, CreatedAt));
     }

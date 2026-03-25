@@ -17,7 +17,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                .HasMaxLength(150)
                .IsRequired();
 
-        // Armazena o value object Email como coluna de string simples
         builder.Property(u => u.Email)
                .HasColumnName("Email")
                .HasMaxLength(320)

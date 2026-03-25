@@ -1,6 +1,6 @@
+using FCG.Domain.Shared;
 using FCG.Domain.Users.Interfaces;
 using FCG.Infrastructure.Persistence.Context;
-using FCG.Infrastructure.Persistence.Repositories;
 
 namespace FCG.Infrastructure.Persistence;
 
@@ -8,7 +8,7 @@ public class UnitOfWork(
     AppDbContext context,
     IUserRepository users,
     IRoleRepository roles,
-    IUserGameLibraryRepository userGameLibraries) : IUnitOfWork
+    IUserGameLibraryRepository userGameLibraries) : IUserUnitOfWork
 {
     public IUserRepository Users { get; } = users;
     public IRoleRepository Roles { get; } = roles;
