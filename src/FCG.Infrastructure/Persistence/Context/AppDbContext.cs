@@ -1,4 +1,5 @@
 using FCG.Domain.Games.Entities;
+using FCG.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FCG.Infrastructure.Persistence.Context;
@@ -7,9 +8,32 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Game> Games => Set<Game>();
 
+    // === MODELAGEM DE DADOS — EF Core 10 ===
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Role> Roles => Set<Role>();
+    public DbSet<UserGameLibrary> UserGameLibrary => Set<UserGameLibrary>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries<Domain.Shared.Entity>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Property(nameof(Domain.Shared.Entity.CreatedAt)).CurrentValue = DateTime.UtcNow;
+                    break;
+                case EntityState.Modified:
+                    entry.Property(nameof(Domain.Shared.Entity.UpdatedAt)).CurrentValue = DateTime.UtcNow;
+                    break;
+            }
+        }
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }
