@@ -8,7 +8,7 @@ public class User : Entity
 {
     private readonly List<UserGameLibrary> _gameLibrary = [];
 
-    public string Name { get; private set; } = null!;
+    public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
     public string PasswordHash { get; private set; } = null!;
 
@@ -17,9 +17,12 @@ public class User : Entity
 
     public Role? Role { get; private set; }
     public IReadOnlyCollection<UserGameLibrary> GameLibrary => _gameLibrary.AsReadOnly();
-    protected User() { }
 
-    private User(string name, Email email, string passwordHash, Guid roleId) : base()
+    protected User()
+    {
+    }
+
+    private User(Name name, Email email, string passwordHash, Guid roleId) : base()
     {
         Name = name;
         Email = email;
@@ -27,35 +30,31 @@ public class User : Entity
         RoleId = roleId;
         IsActive = true;
     }
+
     public static User Create(string name, string email, string passwordHash, Guid roleId)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new UserDomainException("User name cannot be null or empty.");
-        if (name.Length > 150)
-            throw new UserDomainException("User name cannot exceed 150 characters.");
         if (string.IsNullOrWhiteSpace(passwordHash))
             throw new UserDomainException("Password hash cannot be null or empty.");
         if (roleId == Guid.Empty)
             throw new UserDomainException("RoleId cannot be an empty Guid.");
 
         var emailVo = Email.Create(email);
-        return new User(name.Trim(), emailVo, passwordHash, roleId);
+        var nameVo = Name.Create(name);
+        return new User(nameVo, emailVo, passwordHash, roleId);
     }
+
     public void UpdateName(string name)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new UserDomainException("User name cannot be null or empty.");
-        if (name.Length > 150)
-            throw new UserDomainException("User name cannot exceed 150 characters.");
-
-        Name = name.Trim();
+        Name = Name.Create(name);
         UpdatedAt = DateTime.UtcNow;
     }
+
     public void UpdateEmail(string email)
     {
         Email = Email.Create(email);
         UpdatedAt = DateTime.UtcNow;
     }
+
     public void UpdatePassword(string newHash)
     {
         if (string.IsNullOrWhiteSpace(newHash))
@@ -64,6 +63,7 @@ public class User : Entity
         PasswordHash = newHash;
         UpdatedAt = DateTime.UtcNow;
     }
+
     public void ChangeRole(Guid roleId)
     {
         if (roleId == Guid.Empty)
@@ -72,11 +72,13 @@ public class User : Entity
         RoleId = roleId;
         UpdatedAt = DateTime.UtcNow;
     }
+
     public void Deactivate()
     {
         IsActive = false;
         UpdatedAt = DateTime.UtcNow;
     }
+
     public void Activate()
     {
         IsActive = true;

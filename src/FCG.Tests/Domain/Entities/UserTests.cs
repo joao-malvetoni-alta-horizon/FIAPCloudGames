@@ -17,7 +17,7 @@ public class UserTests
         var user = User.Create("John Doe", ValidEmail, ValidHash, ValidRoleId);
 
         user.Should().NotBeNull();
-        user.Name.Should().Be("John Doe");
+        user.Name.Value.Should().Be("John Doe");
         user.Email.Address.Should().Be(ValidEmail);
         user.PasswordHash.Should().Be(ValidHash);
         user.RoleId.Should().Be(ValidRoleId);
@@ -63,7 +63,7 @@ public class UserTests
         var user = User.Create("John Doe", ValidEmail, ValidHash, ValidRoleId);
         user.UpdateName("Jane Doe");
 
-        user.Name.Should().Be("Jane Doe");
+        user.Name.Value.Should().Be("Jane Doe");
         user.UpdatedAt.Should().NotBeNull();
     }
 

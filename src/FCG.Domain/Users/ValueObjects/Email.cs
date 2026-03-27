@@ -5,7 +5,7 @@ namespace FCG.Domain.Users.ValueObjects;
 
 public sealed class Email
 {
-    private static readonly Regex _regex = new(
+    private static readonly Regex Regex = new(
         @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
         RegexOptions.Compiled | RegexOptions.IgnoreCase,
         TimeSpan.FromMilliseconds(250));
@@ -21,10 +21,9 @@ public sealed class Email
         if (string.IsNullOrWhiteSpace(address))
             throw new UserDomainException("E-mail address cannot be null or empty.");
 
-        if (!_regex.IsMatch(address.Trim()))
-            throw new UserDomainException($"E-mail address '{address}' has an invalid format.");
-
-        return new Email(address.Trim().ToLowerInvariant());
+        return !Regex.IsMatch(address.Trim())
+            ? throw new UserDomainException($"E-mail address '{address}' has an invalid format.")
+            : new Email(address.Trim().ToLowerInvariant());
     }
 
     public override bool Equals(object? obj) =>
