@@ -22,7 +22,7 @@ public class User : Entity
     {
     }
 
-    private User(Name name, Email email, string passwordHash, Guid roleId) : base()
+    private User(Name name, Email email, string passwordHash, Guid roleId)
     {
         Name = name;
         Email = email;

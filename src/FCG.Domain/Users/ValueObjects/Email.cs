@@ -5,6 +5,10 @@ namespace FCG.Domain.Users.ValueObjects;
 
 public sealed class Email
 {
+
+    public const int MaxLength = 320;
+    private const int MinLength = 5;
+
     private static readonly Regex Regex = new(
         @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
         RegexOptions.Compiled | RegexOptions.IgnoreCase,
@@ -20,10 +24,13 @@ public sealed class Email
     {
         if (string.IsNullOrWhiteSpace(address))
             throw new UserDomainException("E-mail address cannot be null or empty.");
+        var normalized = address.Trim();
+        if (normalized.Length is > MaxLength or < MinLength)
+            throw new UserDomainException($"E-mail address must be between {MinLength} and {MaxLength} characters.");
 
-        return !Regex.IsMatch(address.Trim())
-            ? throw new UserDomainException($"E-mail address '{address}' has an invalid format.")
-            : new Email(address.Trim().ToLowerInvariant());
+        return !Regex.IsMatch(normalized)
+            ? throw new UserDomainException($"E-mail address '{normalized}' has an invalid format.")
+            : new Email(normalized.ToLowerInvariant());
     }
 
     public override bool Equals(object? obj) =>

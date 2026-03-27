@@ -14,22 +14,26 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Id).ValueGeneratedNever();
 
         builder.Property(u => u.Name)
-               .HasMaxLength(150)
-               .IsRequired();
+            .HasColumnName("Name")
+            .HasMaxLength(Name.MaxLength)
+            .IsRequired()
+            .HasConversion(
+                name => name.Value,
+                raw => Name.FromStorage(raw));
 
         builder.Property(u => u.Email)
-               .HasColumnName("Email")
-               .HasMaxLength(320)
-               .IsRequired()
-               .HasConversion(
-                   email => email.Address,
-                   raw => Email.FromStorage(raw));
+            .HasColumnName("Email")
+            .HasMaxLength(Email.MaxLength)
+            .IsRequired()
+            .HasConversion(
+                email => email.Address,
+                raw => Email.FromStorage(raw));
 
         builder.HasIndex(u => u.Email).IsUnique();
 
         builder.Property(u => u.PasswordHash)
-               .HasMaxLength(500)
-               .IsRequired();
+            .HasMaxLength(500)
+            .IsRequired();
 
         builder.Property(u => u.RoleId).IsRequired();
         builder.Property(u => u.IsActive).IsRequired();
@@ -37,13 +41,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.UpdatedAt);
 
         builder.HasOne(u => u.Role)
-               .WithMany(r => r.Users)
-               .HasForeignKey(u => u.RoleId)
-               .OnDelete(DeleteBehavior.Restrict);
+            .WithMany(r => r.Users)
+            .HasForeignKey(u => u.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(u => u.GameLibrary)
-               .WithOne(gl => gl.User)
-               .HasForeignKey(gl => gl.UserId)
-               .OnDelete(DeleteBehavior.Cascade);
+            .WithOne(gl => gl.User)
+            .HasForeignKey(gl => gl.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

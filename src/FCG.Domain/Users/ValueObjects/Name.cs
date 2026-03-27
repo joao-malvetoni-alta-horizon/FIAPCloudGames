@@ -31,4 +31,6 @@ public sealed record Name
     public override string ToString() => Value;
 
     public static implicit operator string(Name name) => name.Value;
+
+    public static Name FromStorage(string raw) => new(raw);
 }
