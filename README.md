@@ -61,3 +61,46 @@ POST /api/games
 - Entity Framework Core + PostgreSQL
 - Swashbuckle (Swagger)
 - Docker / Docker Compose
+
+
+## Linguagem Ubíqua 
+
+### Entidades e Agregados
+
+| Termo | Definição | Representação no código|
+|--------|--------------------|---------------------------------|
+| Usuário| Indíviduo apto a consumir ou administrar jogos na plataforma | User |
+| Jogo   | Conteúdo interativo digital | Game |
+| Biblioteca | Acervo de jogos adquiridos pelo jogador | UserGameLibrary |
+| Papel | Define os níveis de autoridade de um usuário | Role |
+
+### Objetos de Valor
+
+| Representação no código | Definição |
+|--------|--------------------|
+| Name | Nome do usuário |
+| Email| Endereço de -mail utilizado no cadastro do usuário |
+| Password | Senha de acesso do usuário, deve conter 8 dígitos e ao menos um dos caracteres especiais "!@#$%^&*()-_+="|
+| Price | Representa o custo do jogo; nunca pode ser um valor negativo |
+| Price | Define os níveis de autoridade de um usuário |
+
+### Dicionário de Estados (Enums)
+
+- RoleType: Define o nível de acesso do User
+  * User
+  * Administrator
+
+- GameGenre: Define o gênero do Game
+  * Action
+  * RPG
+  * Strategy
+  * Sports
+  * Puzzle
+  * Other
+ 
+- GameStatus: Define o status do Game
+  * Active (Ativo)
+  * Inactive (Inativo)
+  * ComingSoon (Em breve)
+  
+  
