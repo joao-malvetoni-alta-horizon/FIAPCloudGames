@@ -78,6 +78,7 @@ POST /api/games
 
 | Representação no código | Definição |
 |--------|--------------------|
+| Id | Guid utilizado na criação de qualquer entidade |
 | Name | Nome do usuário |
 | Email| Endereço de e-mail utilizado no cadastro do usuário |
 | Password | Senha de acesso do usuário, deve conter 8 dígitos e ao menos um dos caracteres especiais "!@#$%^&*()-_+="|
