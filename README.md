@@ -83,7 +83,6 @@ POST /api/games
 | Email| Endereço de e-mail utilizado no cadastro do usuário |
 | Password | Senha de acesso do usuário, deve conter 8 dígitos e ao menos um dos caracteres especiais "!@#$%^&*()-_+="|
 | Price | Representa o custo do jogo; nunca pode ser um valor negativo |
-| Price | Define os níveis de autoridade de um usuário |
 
 ### Dicionário de Estados (Enums)
 
