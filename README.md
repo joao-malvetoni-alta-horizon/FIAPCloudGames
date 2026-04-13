@@ -62,6 +62,10 @@ POST /api/games
 - Swashbuckle (Swagger)
 - Docker / Docker Compose
 
+## Documentação
+
+- Requisitos da fase: [TC NETT - Fase 1.pdf](./TC%20NETT%20-%20Fase%201.pdf)
+
 
 ## Linguagem Ubíqua 
 
