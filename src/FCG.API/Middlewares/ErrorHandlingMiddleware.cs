@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using FCG.Domain.Games.Exceptions;
+using FCG.Domain.Users.Exceptions;
 
 namespace FCG.API.Middlewares;
 
@@ -23,6 +24,8 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         var (statusCode, message) = exception switch
         {
             GameNotFoundException => (HttpStatusCode.NotFound, exception.Message),
+            UserNotFoundException => (HttpStatusCode.NotFound, exception.Message),
+            UserAlreadyOwnsGameException => (HttpStatusCode.Conflict, exception.Message),
             DomainException => (HttpStatusCode.BadRequest, exception.Message),
             _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
         };

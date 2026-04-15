@@ -21,6 +21,7 @@ if (app.Environment.IsDevelopment()) app.UseSwaggerConfig();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapGameEndpoints();
+app.MapUserEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {
