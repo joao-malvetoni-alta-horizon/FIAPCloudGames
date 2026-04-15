@@ -3,14 +3,17 @@ using FCG.Application.Games.Interfaces;
 using FCG.Application.Games.Mappers;
 using FCG.Domain.Games.Exceptions;
 using FCG.Domain.Games.Interfaces;
+using FCG.Domain.Games.Policies;
 using FCG.Domain.Shared;
 
 namespace FCG.Application.Games.UseCases;
 
 public class UpdateGameUseCase(IGameRepository repository, IUnitOfWork unitOfWork) : IUpdateGameUseCase
 {
-    public async Task<GameResponse> ExecuteAsync(Guid id, UpdateGameRequest request, CancellationToken ct = default)
+    public async Task<GameResponse> ExecuteAsync(Guid id, UpdateGameRequest request, Guid roleId, CancellationToken ct = default)
     {
+        GameManagementPolicy.EnsureCanManage(roleId);
+
         var game = await repository.GetByIdAsync(id, ct)
                    ?? throw new GameNotFoundException(id);
 

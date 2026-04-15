@@ -4,5 +4,5 @@ namespace FCG.Application.Games.Interfaces;
 
 public interface IUpdateGameUseCase
 {
-    Task<GameResponse> ExecuteAsync(Guid id, UpdateGameRequest request, CancellationToken ct = default);
+    Task<GameResponse> ExecuteAsync(Guid id, UpdateGameRequest request, Guid roleId, CancellationToken ct = default);
 }

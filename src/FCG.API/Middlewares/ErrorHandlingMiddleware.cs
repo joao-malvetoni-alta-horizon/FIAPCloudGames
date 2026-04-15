@@ -23,6 +23,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         var (statusCode, message) = exception switch
         {
             GameNotFoundException => (HttpStatusCode.NotFound, exception.Message),
+            InsufficientGameManagementPermissionException => (HttpStatusCode.Forbidden, exception.Message),
             DomainException => (HttpStatusCode.BadRequest, exception.Message),
             _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
         };

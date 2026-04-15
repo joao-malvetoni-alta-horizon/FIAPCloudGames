@@ -4,5 +4,5 @@ namespace FCG.Application.Games.Interfaces;
 
 public interface ICreateGameUseCase
 {
-    Task<GameResponse> ExecuteAsync(CreateGameRequest request, CancellationToken ct = default);
+    Task<GameResponse> ExecuteAsync(CreateGameRequest request, Guid roleId, CancellationToken ct = default);
 }
