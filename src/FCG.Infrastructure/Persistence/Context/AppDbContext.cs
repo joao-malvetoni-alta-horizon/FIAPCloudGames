@@ -9,7 +9,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Game> Games => Set<Game>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
-    public DbSet<UserGameLibrary> UserGameLibrary => Set<UserGameLibrary>();
+    public DbSet<UserOwnedGame> UserOwnedGames => Set<UserOwnedGame>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

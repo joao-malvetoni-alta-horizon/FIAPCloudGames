@@ -1,4 +1,3 @@
-using FCG.Domain.Shared;
 using FCG.Domain.Users.Interfaces;
 using FCG.Infrastructure.Persistence.Context;
 
@@ -8,11 +7,11 @@ public class UnitOfWork(
     AppDbContext context,
     IUserRepository users,
     IRoleRepository roles,
-    IUserGameLibraryRepository userGameLibraries) : IUserUnitOfWork
+    IUserOwnedGameRepository userOwnedGames) : IUserUnitOfWork
 {
     public IUserRepository Users { get; } = users;
     public IRoleRepository Roles { get; } = roles;
-    public IUserGameLibraryRepository UserGameLibraries { get; } = userGameLibraries;
+    public IUserOwnedGameRepository UserOwnedGames { get; } = userOwnedGames;
 
     public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
         => await context.SaveChangesAsync(cancellationToken);
