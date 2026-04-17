@@ -1,10 +1,12 @@
 using FCG.Application.Games.Interfaces;
 using FCG.Application.Games.UseCases;
+using FCG.Application.Users.UseCases;
 using FCG.Domain.Games.Interfaces;
 using FCG.Domain.Shared;
 using FCG.Domain.Users.Interfaces;
 using FCG.Infrastructure.Persistence;
 using FCG.Infrastructure.Persistence.Context;
+using FCG.Domain.Users.Services;
 using FCG.Infrastructure.Persistence.Repositories;
 using FCG.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IListGamesUseCase, ListGamesUseCase>();
         services.AddScoped<IUpdateGameUseCase, UpdateGameUseCase>();
         services.AddScoped<IDeleteGameUseCase, DeleteGameUseCase>();
+        services.AddScoped<RegisterUserUseCase>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserOwnedGameRepository, UserOwnedGameRepository>();
@@ -34,6 +37,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<UnitOfWork>());
         services.AddScoped<IUserUnitOfWork>(provider => provider.GetRequiredService<UnitOfWork>());
         services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
+        services.AddScoped<IUserService, UserService>();
 
         return services;
     }
