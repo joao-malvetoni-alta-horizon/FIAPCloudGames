@@ -22,6 +22,7 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapGameEndpoints();
 app.MapUserEndpoints();
+app.MapUsersEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {

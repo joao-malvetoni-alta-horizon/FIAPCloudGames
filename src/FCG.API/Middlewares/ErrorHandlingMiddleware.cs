@@ -26,6 +26,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
             GameNotFoundException => (HttpStatusCode.NotFound, exception.Message),
             UserNotFoundException => (HttpStatusCode.NotFound, exception.Message),
             UserAlreadyOwnsGameException => (HttpStatusCode.Conflict, exception.Message),
+            UserAlreadyExistsException => (HttpStatusCode.Conflict, exception.Message),
             DomainException => (HttpStatusCode.BadRequest, exception.Message),
             _ => (HttpStatusCode.InternalServerError, "An unexpected error occurred.")
         };
