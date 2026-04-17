@@ -6,7 +6,7 @@ namespace FCG.Domain.Users.Entities;
 
 public class User : Entity
 {
-    private readonly List<UserGameLibrary> _gameLibrary = [];
+    private readonly List<UserOwnedGame> _ownedGames = [];
 
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
@@ -16,7 +16,7 @@ public class User : Entity
     public bool IsActive { get; private set; }
 
     public Role? Role { get; private set; }
-    public IReadOnlyCollection<UserGameLibrary> GameLibrary => _gameLibrary.AsReadOnly();
+    public IReadOnlyCollection<UserOwnedGame> OwnedGames => _ownedGames.AsReadOnly();
 
     protected User()
     {
