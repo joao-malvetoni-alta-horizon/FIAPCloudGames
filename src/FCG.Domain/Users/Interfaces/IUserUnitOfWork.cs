@@ -6,5 +6,5 @@ public interface IUserUnitOfWork : IUnitOfWork
 {
     IUserRepository Users { get; }
     IRoleRepository Roles { get; }
-    IUserGameLibraryRepository UserGameLibraries { get; }
+    IUserOwnedGameRepository UserOwnedGames { get; }
 }

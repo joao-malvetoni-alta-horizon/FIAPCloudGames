@@ -32,7 +32,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<RegisterUserUseCase>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IUserGameLibraryRepository, UserGameLibraryRepository>();
+        services.AddScoped<IUserOwnedGameRepository, UserOwnedGameRepository>();
         services.AddScoped<UnitOfWork>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<UnitOfWork>());
         services.AddScoped<IUserUnitOfWork>(provider => provider.GetRequiredService<UnitOfWork>());
