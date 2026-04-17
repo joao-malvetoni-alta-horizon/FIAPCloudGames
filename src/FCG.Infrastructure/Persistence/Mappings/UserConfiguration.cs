@@ -45,7 +45,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(u => u.RoleId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(u => u.GameLibrary)
+        builder.HasMany(u => u.OwnedGames)
             .WithOne(gl => gl.User)
             .HasForeignKey(gl => gl.UserId)
             .OnDelete(DeleteBehavior.Cascade);
