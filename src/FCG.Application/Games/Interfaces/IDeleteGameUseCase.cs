@@ -2,5 +2,5 @@ namespace FCG.Application.Games.Interfaces;
 
 public interface IDeleteGameUseCase
 {
-    Task ExecuteAsync(Guid id, CancellationToken ct = default);
+    Task ExecuteAsync(Guid id, Guid roleId, CancellationToken ct = default);
 }
