@@ -1,5 +1,6 @@
 using FCG.Application.Games.Interfaces;
 using FCG.Application.Games.UseCases;
+using FCG.Application.Users.Interfaces;
 using FCG.Application.Users.UseCases;
 using FCG.Domain.Games.Interfaces;
 using FCG.Domain.Shared;
@@ -29,6 +30,8 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IListGamesUseCase, ListGamesUseCase>();
         services.AddScoped<IUpdateGameUseCase, UpdateGameUseCase>();
         services.AddScoped<IDeleteGameUseCase, DeleteGameUseCase>();
+        services.AddScoped<IPurchaseOwnedGameUseCase, PurchaseOwnedGameUseCase>();
+        services.AddScoped<IGetUserOwnedGamesUseCase, GetUserOwnedGamesUseCase>();
         services.AddScoped<RegisterUserUseCase>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
