@@ -43,7 +43,7 @@ public class DatabaseSeederTests
     {
         await using var db = CreateInMemoryContext();
         var adminRoleId = RoleType.Administrator.ToRoleId();
-        var existingAdmin = User.Create("Existing Admin", "admin@fcg.com", "$2a$12$somehash", adminRoleId);
+        var existingAdmin = User.CreateRootAdmin("Existing Admin", "admin@fcg.com", "$2a$12$somehash", adminRoleId);
         db.Users.Add(existingAdmin);
         await db.SaveChangesAsync();
 

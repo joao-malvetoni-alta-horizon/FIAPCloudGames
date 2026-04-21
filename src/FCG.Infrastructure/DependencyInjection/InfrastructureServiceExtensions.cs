@@ -40,6 +40,11 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IPurchaseOwnedGameUseCase, PurchaseOwnedGameUseCase>();
         services.AddScoped<IGetUserOwnedGamesUseCase, GetUserOwnedGamesUseCase>();
         services.AddScoped<RegisterUserUseCase>();
+        services.AddScoped<IAdminCreateUserUseCase, AdminCreateUserUseCase>();
+        services.AddScoped<IListUsersUseCase, ListUsersUseCase>();
+        services.AddScoped<IGetUserDetailUseCase, GetUserDetailUseCase>();
+        services.AddScoped<IAdminUpdateUserUseCase, AdminUpdateUserUseCase>();
+        services.AddScoped<IAdminDeleteUserUseCase, AdminDeleteUserUseCase>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserOwnedGameRepository, UserOwnedGameRepository>();

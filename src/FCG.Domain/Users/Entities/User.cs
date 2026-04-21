@@ -1,4 +1,5 @@
 using FCG.Domain.Shared;
+using FCG.Domain.Users.Constants;
 using FCG.Domain.Users.Exceptions;
 using FCG.Domain.Users.ValueObjects;
 
@@ -14,6 +15,7 @@ public class User : Entity
 
     public Guid RoleId { get; private set; }
     public bool IsActive { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
 
     public Role? Role { get; private set; }
     public IReadOnlyCollection<UserOwnedGame> OwnedGames => _ownedGames.AsReadOnly();
@@ -83,5 +85,19 @@ public class User : Entity
     {
         IsActive = true;
         UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void SoftDelete()
+    {
+        IsActive = false;
+        DeletedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public static User CreateRootAdmin(string name, string email, string passwordHash, Guid roleId)
+    {
+        var admin = Create(name, email, passwordHash, roleId);
+        admin.Id = UserSeedConstants.RootAdminId;
+        return admin;
     }
 }

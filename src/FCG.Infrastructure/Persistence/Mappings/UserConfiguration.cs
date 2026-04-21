@@ -39,6 +39,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsActive).IsRequired();
         builder.Property(u => u.CreatedAt).IsRequired();
         builder.Property(u => u.UpdatedAt);
+        builder.Property(u => u.DeletedAt);
+
+        builder.HasQueryFilter(u => u.DeletedAt == null);
 
         builder.HasOne(u => u.Role)
             .WithMany(r => r.Users)
