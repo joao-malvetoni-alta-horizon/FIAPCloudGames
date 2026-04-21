@@ -3,6 +3,7 @@ using FCG.API.Configuration;
 using FCG.API.Endpoints;
 using FCG.API.Middlewares;
 using FCG.Infrastructure.DependencyInjection;
+using FCG.Infrastructure.Persistence;
 using FCG.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,10 @@ if (app.Environment.IsDevelopment()) app.UseSwaggerConfig();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapAuthEndpoints();
 app.MapGameEndpoints();
 app.MapUserEndpoints();
 app.MapUsersEndpoints();
@@ -40,6 +45,9 @@ using (var scope = app.Services.CreateScope())
                 retries);
             Thread.Sleep(3000);
         }
+
+    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+    await seeder.SeedAsync();
 }
 
 app.Run();
