@@ -30,13 +30,13 @@ public class PurchaseOwnedGameUseCase(
         if (game.Status != GameStatus.Active)
             throw new DomainValidationException("Only active games can be acquired.");
 
-        var alreadyOwned = await unitOfWork.UserGameLibraries.ExistsAsync(userId, request.GameId, cancellationToken);
+        var alreadyOwned = await unitOfWork.UserOwnedGames.ExistsAsync(userId, request.GameId, cancellationToken);
         if (alreadyOwned)
             throw new UserAlreadyOwnsGameException(userId, request.GameId);
 
-        var acquiredGame = UserGameLibrary.Create(userId, request.GameId, game.Price.Amount);
+        var acquiredGame = UserOwnedGame.Create(userId, request.GameId, game.Price.Amount);
 
-        await unitOfWork.UserGameLibraries.AddAsync(acquiredGame, cancellationToken);
+        await unitOfWork.UserOwnedGames.AddAsync(acquiredGame, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 
         return new PurchaseOwnedGameResponse(

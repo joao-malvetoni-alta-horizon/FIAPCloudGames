@@ -12,13 +12,13 @@ public class GetUserOwnedGamesUseCaseTests
 {
     private readonly Mock<IUserUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<IUserRepository> _usersMock = new();
-    private readonly Mock<IUserGameLibraryRepository> _librariesMock = new();
+    private readonly Mock<IUserOwnedGameRepository> _librariesMock = new();
     private readonly GetUserOwnedGamesUseCase _sut;
 
     public GetUserOwnedGamesUseCaseTests()
     {
         _unitOfWorkMock.SetupGet(u => u.Users).Returns(_usersMock.Object);
-        _unitOfWorkMock.SetupGet(u => u.UserGameLibraries).Returns(_librariesMock.Object);
+        _unitOfWorkMock.SetupGet(u => u.UserOwnedGames).Returns(_librariesMock.Object);
         _sut = new GetUserOwnedGamesUseCase(_unitOfWorkMock.Object);
     }
 
@@ -38,9 +38,9 @@ public class GetUserOwnedGamesUseCaseTests
     {
         var userId = Guid.NewGuid();
         var user = CreateActiveUser();
-        var first = UserGameLibrary.Create(userId, Guid.NewGuid(), 20m);
+        var first = UserOwnedGame.Create(userId, Guid.NewGuid(), 20m);
         Thread.Sleep(10);
-        var second = UserGameLibrary.Create(userId, Guid.NewGuid(), 35m);
+        var second = UserOwnedGame.Create(userId, Guid.NewGuid(), 35m);
 
         _usersMock.Setup(r => r.GetByIdAsync(userId, It.IsAny<CancellationToken>())).ReturnsAsync(user);
         _librariesMock.Setup(r => r.GetByUserIdAsync(user.Id, It.IsAny<CancellationToken>()))
