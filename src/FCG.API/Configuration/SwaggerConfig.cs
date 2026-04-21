@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace FCG.API.Configuration;
 
@@ -14,20 +16,14 @@ public static class SwaggerConfig
             options.AddSecurityDefinition(BearerScheme, new OpenApiSecurityScheme
             {
                 Name = "Authorization",
-                Description = "Enter the JWT token using the format: Bearer {token}",
+                Description = "Enter only the JWT token (without 'Bearer' prefix)",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
                 Scheme = BearerScheme,
                 BearerFormat = "JWT"
             });
 
-            options.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecuritySchemeReference(BearerScheme),
-                    new List<string>()
-                }
-            });
+            options.OperationFilter<BearerSecurityOperationFilter>();
         });
 
         return services;
@@ -43,5 +39,28 @@ public static class SwaggerConfig
         });
 
         return app;
+    }
+}
+
+file sealed class BearerSecurityOperationFilter : IOperationFilter
+{
+    private static readonly OpenApiSecurityRequirement Requirement = new()
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer"),
+            new List<string>()
+        }
+    };
+
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    {
+        var hasAuthorize = context.ApiDescription.ActionDescriptor.EndpointMetadata
+            .OfType<IAuthorizeData>()
+            .Any();
+
+        if (!hasAuthorize) return;
+
+        operation.Security ??= new List<OpenApiSecurityRequirement>();
+        operation.Security.Add(Requirement);
     }
 }
