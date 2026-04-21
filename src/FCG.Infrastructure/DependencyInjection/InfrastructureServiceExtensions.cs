@@ -31,12 +31,18 @@ public static class InfrastructureServiceExtensions
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<IGameRepository, GameRepository>();
+        services.AddScoped<IGamePromotionRepository, GamePromotionRepository>();
 
         services.AddScoped<ICreateGameUseCase, CreateGameUseCase>();
         services.AddScoped<IGetGameUseCase, GetGameUseCase>();
         services.AddScoped<IListGamesUseCase, ListGamesUseCase>();
         services.AddScoped<IUpdateGameUseCase, UpdateGameUseCase>();
         services.AddScoped<IDeleteGameUseCase, DeleteGameUseCase>();
+        services.AddScoped<ICreatePromotionUseCase, CreatePromotionUseCase>();
+        services.AddScoped<IUpdatePromotionUseCase, UpdatePromotionUseCase>();
+        services.AddScoped<IDeletePromotionUseCase, DeletePromotionUseCase>();
+        services.AddScoped<IGetPromotionUseCase, GetPromotionUseCase>();
+        services.AddScoped<IListPromotionsByGameUseCase, ListPromotionsByGameUseCase>();
         services.AddScoped<IPurchaseOwnedGameUseCase, PurchaseOwnedGameUseCase>();
         services.AddScoped<IGetUserOwnedGamesUseCase, GetUserOwnedGamesUseCase>();
         services.AddScoped<RegisterUserUseCase>();
