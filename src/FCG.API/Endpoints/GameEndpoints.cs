@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FCG.Application.Games.DTOs;
 using FCG.Application.Games.Interfaces;
 using FCG.Domain.Games.Enums;
@@ -6,15 +7,15 @@ namespace FCG.API.Endpoints;
 
 public static class GameEndpoints
 {
-    private const string RoleIdHeaderName = "X-Role-Id";
-
     public static void MapGameEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/games")
-            .WithTags("Games");
+            .WithTags("Games")
+            .RequireAuthorization();
 
         group.MapPost("/", CreateGame)
             .WithName("CreateGame")
+            .RequireAuthorization("AdminOnly")
             .Produces<GameResponse>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status400BadRequest);
@@ -30,6 +31,7 @@ public static class GameEndpoints
 
         group.MapPut("/{id:guid}", UpdateGame)
             .WithName("UpdateGame")
+            .RequireAuthorization("AdminOnly")
             .Produces<GameResponse>()
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound)
@@ -37,6 +39,7 @@ public static class GameEndpoints
 
         group.MapDelete("/{id:guid}", DeleteGame)
             .WithName("DeleteGame")
+            .RequireAuthorization("AdminOnly")
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound);
@@ -98,11 +101,7 @@ public static class GameEndpoints
 
     private static Guid ResolveRoleId(HttpContext httpContext)
     {
-        if (!httpContext.Request.Headers.TryGetValue(RoleIdHeaderName, out var roleIdHeader))
-            return Guid.Empty;
-
-        return Guid.TryParse(roleIdHeader, out var roleId)
-            ? roleId
-            : Guid.Empty;
+        var roleIdClaim = httpContext.User.FindFirst("roleId")?.Value;
+        return Guid.TryParse(roleIdClaim, out var roleId) ? roleId : Guid.Empty;
     }
 }
