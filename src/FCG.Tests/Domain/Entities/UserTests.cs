@@ -76,4 +76,60 @@ public class UserTests
         user.IsActive.Should().BeFalse();
         user.UpdatedAt.Should().NotBeNull();
     }
+
+    [Fact]
+    public void Activate_ShouldSetIsActiveTrue()
+    {
+        var user = User.Create("John Doe", ValidEmail, ValidHash, ValidRoleId);
+        user.Deactivate();
+        user.Activate();
+
+        user.IsActive.Should().BeTrue();
+        user.UpdatedAt.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void SoftDelete_ShouldSetIsActiveFalseAndDeletedAt()
+    {
+        var user = User.Create("John Doe", ValidEmail, ValidHash, ValidRoleId);
+        var before = DateTime.UtcNow;
+        user.SoftDelete();
+
+        user.IsActive.Should().BeFalse();
+        user.DeletedAt.Should().NotBeNull();
+        user.DeletedAt.Should().BeOnOrAfter(before);
+        user.UpdatedAt.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ChangeRole_ValidRoleId_ShouldUpdateRoleId()
+    {
+        var user = User.Create("John Doe", ValidEmail, ValidHash, ValidRoleId);
+        var newRoleId = RoleType.Administrator.ToRoleId();
+
+        user.ChangeRole(newRoleId);
+
+        user.RoleId.Should().Be(newRoleId);
+        user.UpdatedAt.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ChangeRole_EmptyRoleId_ShouldThrowUserDomainException()
+    {
+        var user = User.Create("John Doe", ValidEmail, ValidHash, ValidRoleId);
+
+        var act = () => user.ChangeRole(Guid.Empty);
+
+        act.Should().Throw<UserDomainException>()
+           .WithMessage("*RoleId cannot be an empty Guid*");
+    }
+
+    [Fact]
+    public void CreateRootAdmin_ShouldHaveRootAdminId()
+    {
+        var admin = User.CreateRootAdmin("Root Admin", "root@example.com", ValidHash, ValidRoleId);
+
+        admin.Id.Should().Be(FCG.Domain.Users.Constants.UserSeedConstants.RootAdminId);
+        admin.IsActive.Should().BeTrue();
+    }
 }

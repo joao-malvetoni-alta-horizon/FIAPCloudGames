@@ -1,3 +1,4 @@
+using FCG.Domain.Users.Constants;
 using FCG.Domain.Users.Entities;
 using FCG.Domain.Users.Enums;
 using FCG.Domain.Users.Interfaces;
@@ -14,13 +15,15 @@ public class DatabaseSeeder(AppDbContext db, IPasswordHasher passwordHasher, ILo
 
     public async Task SeedAsync(CancellationToken cancellationToken = default)
     {
-        var adminRoleId = RoleType.Administrator.ToRoleId();
-        var adminExists = await db.Users.AnyAsync(u => u.RoleId == adminRoleId, cancellationToken);
+        var adminExists = await db.Users
+            .IgnoreQueryFilters()
+            .AnyAsync(u => u.Id == UserSeedConstants.RootAdminId, cancellationToken);
 
         if (adminExists) return;
 
+        var adminRoleId = RoleType.Administrator.ToRoleId();
         var passwordHash = passwordHasher.Hash(AdminPassword);
-        var admin = User.Create("Administrador", AdminEmail, passwordHash, adminRoleId);
+        var admin = User.CreateRootAdmin("Administrador", AdminEmail, passwordHash, adminRoleId);
 
         db.Users.Add(admin);
         await db.SaveChangesAsync(cancellationToken);

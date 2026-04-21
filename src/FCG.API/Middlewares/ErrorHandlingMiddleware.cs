@@ -27,6 +27,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
             UserNotFoundException => (HttpStatusCode.NotFound, exception.Message),
             UserAlreadyOwnsGameException => (HttpStatusCode.Conflict, exception.Message),
             InsufficientGameManagementPermissionException => (HttpStatusCode.Forbidden, exception.Message),
+            RootAdminOperationForbiddenException => (HttpStatusCode.Forbidden, exception.Message),
             UserAlreadyExistsException => (HttpStatusCode.Conflict, exception.Message),
             InvalidCredentialsException => (HttpStatusCode.Unauthorized, exception.Message),
             DomainException => (HttpStatusCode.BadRequest, exception.Message),
