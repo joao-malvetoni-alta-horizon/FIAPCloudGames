@@ -17,14 +17,14 @@ public class PurchaseOwnedGameUseCaseTests
 {
     private readonly Mock<IUserUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<IUserRepository> _usersMock = new();
-    private readonly Mock<IUserGameLibraryRepository> _librariesMock = new();
+    private readonly Mock<IUserOwnedGameRepository> _librariesMock = new();
     private readonly Mock<IGameRepository> _gamesMock = new();
     private readonly PurchaseOwnedGameUseCase _sut;
 
     public PurchaseOwnedGameUseCaseTests()
     {
         _unitOfWorkMock.SetupGet(u => u.Users).Returns(_usersMock.Object);
-        _unitOfWorkMock.SetupGet(u => u.UserGameLibraries).Returns(_librariesMock.Object);
+        _unitOfWorkMock.SetupGet(u => u.UserOwnedGames).Returns(_librariesMock.Object);
         _sut = new PurchaseOwnedGameUseCase(_unitOfWorkMock.Object, _gamesMock.Object);
     }
 
@@ -48,7 +48,7 @@ public class PurchaseOwnedGameUseCaseTests
 
         _librariesMock.Verify(
             r => r.AddAsync(
-                It.Is<UserGameLibrary>(g => g.UserId == userId && g.GameId == gameId && g.PricePaid == 120m),
+                It.Is<UserOwnedGame>(g => g.UserId == userId && g.GameId == gameId && g.PricePaid == 120m),
                 It.IsAny<CancellationToken>()),
             Times.Once);
         _unitOfWorkMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);

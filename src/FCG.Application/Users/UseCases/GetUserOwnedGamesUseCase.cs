@@ -14,7 +14,7 @@ public class GetUserOwnedGamesUseCase(IUserUnitOfWork unitOfWork) : IGetUserOwne
         var user = await unitOfWork.Users.GetByIdAsync(userId, cancellationToken)
                    ?? throw new UserNotFoundException(userId);
 
-        var libraryEntries = await unitOfWork.UserGameLibraries.GetByUserIdAsync(user.Id, cancellationToken);
+        var libraryEntries = await unitOfWork.UserOwnedGames.GetByUserIdAsync(user.Id, cancellationToken);
 
         return libraryEntries
             .OrderByDescending(entry => entry.AcquiredAt)
