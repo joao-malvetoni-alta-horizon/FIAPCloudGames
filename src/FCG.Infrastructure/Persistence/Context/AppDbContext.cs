@@ -7,6 +7,7 @@ namespace FCG.Infrastructure.Persistence.Context;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Game> Games => Set<Game>();
+    public DbSet<GamePromotion> GamePromotions => Set<GamePromotion>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserOwnedGame> UserOwnedGames => Set<UserOwnedGame>();

@@ -24,6 +24,8 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         var (statusCode, message) = exception switch
         {
             GameNotFoundException => (HttpStatusCode.NotFound, exception.Message),
+            PromotionNotFoundException => (HttpStatusCode.NotFound, exception.Message),
+            OverlappingPromotionException => (HttpStatusCode.Conflict, exception.Message),
             UserNotFoundException => (HttpStatusCode.NotFound, exception.Message),
             UserAlreadyOwnsGameException => (HttpStatusCode.Conflict, exception.Message),
             InsufficientGameManagementPermissionException => (HttpStatusCode.Forbidden, exception.Message),

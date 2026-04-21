@@ -29,6 +29,7 @@ app.MapGameEndpoints();
 app.MapUserEndpoints();
 app.MapUsersEndpoints();
 app.MapAdminUserEndpoints();
+app.MapPromotionEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {
