@@ -44,14 +44,6 @@ public static class SwaggerConfig
 
 file sealed class BearerSecurityOperationFilter : IOperationFilter
 {
-    private static readonly OpenApiSecurityRequirement Requirement = new()
-    {
-        {
-            new OpenApiSecuritySchemeReference("Bearer"),
-            new List<string>()
-        }
-    };
-
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var hasAuthorize = context.ApiDescription.ActionDescriptor.EndpointMetadata
@@ -59,6 +51,11 @@ file sealed class BearerSecurityOperationFilter : IOperationFilter
             .Any();
 
         if (!hasAuthorize) return;
+
+        var Requirement = new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("Bearer", context.Document)] = []
+        };
 
         operation.Security ??= new List<OpenApiSecurityRequirement>();
         operation.Security.Add(Requirement);
