@@ -27,6 +27,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IListGamesUseCase, ListGamesUseCase>();
         services.AddScoped<IUpdateGameUseCase, UpdateGameUseCase>();
         services.AddScoped<IDeleteGameUseCase, DeleteGameUseCase>();
+        services.AddScoped<IBuyGameUseCase, BuyGameUseCase>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserGameLibraryRepository, UserGameLibraryRepository>();
