@@ -28,13 +28,56 @@ Swagger UI: **http://localhost:8080/swagger**
 
 ## Endpoints
 
-| Método | Rota               | Descrição                        |
-|--------|--------------------|---------------------------------|
-| POST   | /api/games         | Criar um novo jogo              |
-| GET    | /api/games/{id}    | Buscar jogo por ID              |
-| GET    | /api/games         | Listar jogos (paginado)         |
-| PUT    | /api/games/{id}    | Atualizar um jogo               |
-| DELETE | /api/games/{id}    | Desativar um jogo (soft delete) |
+> 🔒 Requer autenticação (JWT)
+
+### Auth
+
+| Método | Rota            | Descrição        |
+|--------|-----------------|------------------|
+| POST   | /api/auth/login | Gerar token JWT  |
+
+### Games
+
+| Método | Rota            | Descrição                        |
+|--------|-----------------|---------------------------------|
+| POST   | /api/games      | Criar um novo jogo 🔒           |
+| GET    | /api/games      | Listar jogos (paginado/filtro)  |
+| GET    | /api/games/{id} | Buscar jogo por ID              |
+| PUT    | /api/games/{id} | Atualizar um jogo 🔒           |
+| DELETE | /api/games/{id} | Desativar jogo 🔒              |
+
+### Promotions
+
+| Método | Rota                                      | Descrição                        |
+|--------|-------------------------------------------|---------------------------------|
+| GET    | /api/games/{gameId}/promotions            | Listar promoções do jogo         |
+| GET    | /api/games/{gameId}/promotions/{id}       | Buscar promoção por ID           |
+
+### Users
+
+| Método | Rota                                  | Descrição                        |
+|--------|---------------------------------------|---------------------------------|
+| POST   | /api/users/register                   | Registrar novo usuário          |
+| GET    | /api/users/{userId}/owned-games       | Listar jogos do usuário 🔒      |
+| POST   | /api/users/{userId}/owned-games       | Adicionar jogo ao usuário 🔒    |
+
+### Admin - Users
+
+| Método | Rota                     | Descrição                |
+|--------|--------------------------|-------------------------|
+| POST   | /api/admin/users         | Criar usuário 🔒        |
+| GET    | /api/admin/users         | Listar usuários 🔒      |
+| GET    | /api/admin/users/{id}    | Buscar usuário por ID 🔒|
+| PUT    | /api/admin/users/{id}    | Atualizar usuário 🔒    |
+| DELETE | /api/admin/users/{id}    | Remover usuário 🔒      |
+
+### Admin - Promotions
+
+| Método | Rota                                               | Descrição                |
+|--------|----------------------------------------------------|-------------------------|
+| POST   | /api/admin/games/{gameId}/promotions              | Criar promoção 🔒       |
+| PUT    | /api/admin/games/{gameId}/promotions/{id}         | Atualizar promoção 🔒   |
+| DELETE | /api/admin/games/{gameId}/promotions/{id}         | Remover promoção 🔒     |
 
 ### Parâmetros de query para listagem
 
@@ -54,6 +97,13 @@ POST /api/games
   "releaseDate": "2026-06-01"
 }
 ```
+
+### Observações
+
+- Endpoints marcados com 🔒 requerem autenticação JWT
+- Endpoints de **Admin** requerem permissão de administrador
+- IDs são do tipo `UUID`
+- Exclusões são do tipo *soft delete* (quando aplicável)
 
 ## Tecnologias
 
