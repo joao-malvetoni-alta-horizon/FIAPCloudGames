@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FCG.Application.Users.DTOs;
 using FCG.Application.Users.Interfaces;
 
@@ -11,7 +12,7 @@ public static class UserEndpoints
             .WithTags("Users")
             .RequireAuthorization();
 
-        group.MapPost("/{userId:guid}/owned-games", PurchaseOwnedGame)
+        group.MapPost("/owned-games", PurchaseOwnedGame)
             .WithName("PurchaseOwnedGame")
             .Produces<PurchaseOwnedGameResponse>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
@@ -25,11 +26,12 @@ public static class UserEndpoints
     }
 
     private static async Task<IResult> PurchaseOwnedGame(
-        Guid userId,
         PurchaseOwnedGameRequest request,
         IPurchaseOwnedGameUseCase useCase,
+        HttpContext httpContext,
         CancellationToken cancellationToken)
     {
+        var userId = Guid.Parse(httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var response = await useCase.ExecuteAsync(userId, request, cancellationToken);
         return Results.Created($"/api/users/{userId}/owned-games/{response.Id}", response);
     }
