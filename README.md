@@ -1,160 +1,166 @@
 # FIAP Cloud Games (FCG)
 
-Plataforma de gerenciamento de jogos na nuvem, desenvolvida com .NET 10 seguindo Domain-Driven Design (DDD) em arquitetura monolítica.
+Plataforma de venda de jogos digitais e gestão de biblioteca de jogos, desenvolvida como MVP da Fase 1 do Tech Challenge FIAP. Construída com .NET 10 seguindo Domain-Driven Design (DDD) em arquitetura monolítica.
 
-## Estrutura do Projeto
+## Objetivo
 
-```
-src/
-  FCG.Domain/          → Entidades, Value Objects, Enums, Eventos, Exceções
-  FCG.Application/     → Casos de Uso, DTOs, Interfaces
-  FCG.Infrastructure/  → EF Core, Repositórios, Mapeamentos, DI
-  FCG.API/             → Endpoints REST (Minimal API), Middlewares, Swagger
-```
-
-## Pré-requisitos
-
-- [Docker](https://docs.docker.com/get-docker/) e [Docker Compose](https://docs.docker.com/compose/install/)
-
-## Como rodar
-
-```bash
-docker-compose up --build
-```
-
-A API estará disponível em: **http://localhost:8080**
-
-Swagger UI: **http://localhost:8080/swagger**
-
-## Endpoints
-
-> 🔒 Requer autenticação (JWT)
-
-### Auth
-
-| Método | Rota            | Descrição        |
-|--------|-----------------|------------------|
-| POST   | /api/auth/login | Gerar token JWT  |
-
-### Games
-
-| Método | Rota            | Descrição                        |
-|--------|-----------------|---------------------------------|
-| POST   | /api/games      | Criar um novo jogo 🔒           |
-| GET    | /api/games      | Listar jogos (paginado/filtro)  |
-| GET    | /api/games/{id} | Buscar jogo por ID              |
-| PUT    | /api/games/{id} | Atualizar um jogo 🔒           |
-| DELETE | /api/games/{id} | Desativar jogo 🔒              |
-
-### Promotions
-
-| Método | Rota                                      | Descrição                        |
-|--------|-------------------------------------------|---------------------------------|
-| GET    | /api/games/{gameId}/promotions            | Listar promoções do jogo         |
-| GET    | /api/games/{gameId}/promotions/{id}       | Buscar promoção por ID           |
-
-### Users
-
-| Método | Rota                                  | Descrição                        |
-|--------|---------------------------------------|---------------------------------|
-| POST   | /api/users/register                   | Registrar novo usuário          |
-| GET    | /api/users/{userId}/owned-games       | Listar jogos do usuário 🔒      |
-| POST   | /api/users/{userId}/owned-games       | Adicionar jogo ao usuário 🔒    |
-
-### Admin - Users
-
-| Método | Rota                     | Descrição                |
-|--------|--------------------------|-------------------------|
-| POST   | /api/admin/users         | Criar usuário 🔒        |
-| GET    | /api/admin/users         | Listar usuários 🔒      |
-| GET    | /api/admin/users/{id}    | Buscar usuário por ID 🔒|
-| PUT    | /api/admin/users/{id}    | Atualizar usuário 🔒    |
-| DELETE | /api/admin/users/{id}    | Remover usuário 🔒      |
-
-### Admin - Promotions
-
-| Método | Rota                                               | Descrição                |
-|--------|----------------------------------------------------|-------------------------|
-| POST   | /api/admin/games/{gameId}/promotions              | Criar promoção 🔒       |
-| PUT    | /api/admin/games/{gameId}/promotions/{id}         | Atualizar promoção 🔒   |
-| DELETE | /api/admin/games/{gameId}/promotions/{id}         | Remover promoção 🔒     |
-
-### Parâmetros de query para listagem
-
-- `page` (int, default: 1)
-- `pageSize` (int, default: 10, máx: 50)
-- `genre` (opcional: Action, RPG, Strategy, Sports, Puzzle, Other)
-
-### Exemplo de criação de jogo
-
-```json
-POST /api/games
-{
-  "title": "Elden Ring",
-  "description": "Action RPG by FromSoftware",
-  "price": 199.90,
-  "genre": "RPG",
-  "releaseDate": "2026-06-01"
-}
-```
-
-### Observações
-
-- Endpoints marcados com 🔒 requerem autenticação JWT
-- Endpoints de **Admin** requerem permissão de administrador
-- IDs são do tipo `UUID`
-- Exclusões são do tipo *soft delete* (quando aplicável)
+Criar uma API REST para gerenciar usuários e seus jogos adquiridos, com autenticação JWT, autorização por papéis (Usuário/Administrador), persistência com Entity Framework Core e qualidade assegurada por testes unitários e BDD.
 
 ## Tecnologias
 
 - .NET 10 (Minimal APIs)
 - Entity Framework Core + PostgreSQL
-- Swashbuckle (Swagger)
+- JWT (autenticação e autorização)
+- BCrypt (hash de senhas)
+- Serilog (logs estruturados)
+- Swagger / OpenAPI
+- xUnit + Moq + FluentAssertions (testes unitários)
+- Reqnroll + Gherkin (testes BDD)
 - Docker / Docker Compose
 
-## Documentação
+## Estrutura do Projeto
 
-- Requisitos da fase: [TC NETT - Fase 1.pdf](./TC%20NETT%20-%20Fase%201.pdf)
+```
+src/
+  FCG.Domain/          → Entidades, Value Objects, Enums, Eventos, Exceções, Políticas
+  FCG.Application/     → Casos de Uso, DTOs, Interfaces, Mappers
+  FCG.Infrastructure/  → EF Core, Repositórios, JWT, BCrypt, DI
+  FCG.API/             → Endpoints REST (Minimal API), Middlewares, Swagger
+  FCG.Tests/           → Testes Unitários e BDD
+```
 
+## Pré-requisitos
 
-## Linguagem Ubíqua 
+- [Docker](https://docs.docker.com/get-docker/) e [Docker Compose](https://docs.docker.com/compose/install/)
+- (Opcional) [.NET 10 SDK](https://dotnet.microsoft.com/download) para desenvolvimento local
+
+## Como executar
+
+### Via Docker (recomendado)
+
+```bash
+docker-compose up --build
+```
+
+A API estará disponível em **http://localhost:8080** e o Swagger em **http://localhost:8080/swagger**.
+
+### Localmente
+
+```bash
+# Subir apenas o banco
+docker-compose up db -d
+
+# Rodar a API
+cd src/FCG.API
+dotnet run
+```
+
+## Credenciais do Administrador (seed)
+
+Ao iniciar, a aplicação cria automaticamente um usuário administrador:
+
+| Campo | Valor |
+|-------|-------|
+| E-mail | `admin@fcg.com` |
+| Senha | `Admin@123` |
+
+Use essas credenciais no endpoint `/api/auth/login` para obter o token JWT.
+
+## Endpoints
+
+> 🔒 = Requer token JWT | 🔑 = Requer papel Administrador
+
+### Autenticação
+
+| Método | Rota | Descrição | Auth |
+|--------|------|-----------|------|
+| POST | `/api/auth/login` | Gerar token JWT | — |
+
+### Usuários
+
+| Método | Rota | Descrição | Auth |
+|--------|------|-----------|------|
+| POST | `/api/users/register` | Cadastrar novo usuário | — |
+| GET | `/api/users/{userId}/owned-games` | Listar jogos do usuário | 🔒 |
+| POST | `/api/users/{userId}/owned-games` | Adquirir jogo | 🔒 |
+
+### Jogos
+
+| Método | Rota | Descrição | Auth |
+|--------|------|-----------|------|
+| POST | `/api/games` | Cadastrar jogo | 🔑 |
+| GET | `/api/games` | Listar jogos (paginado) | 🔒 |
+| GET | `/api/games/{id}` | Buscar jogo por ID | 🔒 |
+| PUT | `/api/games/{id}` | Atualizar jogo | 🔑 |
+| DELETE | `/api/games/{id}` | Desativar jogo (soft delete) | 🔑 |
+
+### Promoções
+
+| Método | Rota | Descrição | Auth |
+|--------|------|-----------|------|
+| GET | `/api/games/{gameId}/promotions` | Listar promoções do jogo | 🔒 |
+| GET | `/api/games/{gameId}/promotions/{id}` | Buscar promoção | 🔒 |
+| POST | `/api/admin/games/{gameId}/promotions` | Criar promoção | 🔑 |
+| PUT | `/api/admin/games/{gameId}/promotions/{id}` | Atualizar promoção | 🔑 |
+| DELETE | `/api/admin/games/{gameId}/promotions/{id}` | Remover promoção | 🔑 |
+
+### Admin — Usuários
+
+| Método | Rota | Descrição | Auth |
+|--------|------|-----------|------|
+| POST | `/api/admin/users` | Criar usuário | 🔑 |
+| GET | `/api/admin/users` | Listar usuários | 🔑 |
+| GET | `/api/admin/users/{id}` | Buscar usuário | 🔑 |
+| PUT | `/api/admin/users/{id}` | Atualizar usuário | 🔑 |
+| DELETE | `/api/admin/users/{id}` | Remover usuário (soft delete) | 🔑 |
+
+### Parâmetros de listagem
+
+| Parâmetro | Tipo | Padrão | Descrição |
+|-----------|------|--------|-----------|
+| `page` | int | 1 | Página |
+| `pageSize` | int | 10 | Itens por página (máx. 50) |
+| `genre` | string | — | Filtro por gênero (Action, RPG, Strategy, Sports, Puzzle, Other) |
+
+## Validações
+
+- **E-mail**: formato RFC 5322, único no sistema
+- **Senha**: mínimo 8 caracteres, pelo menos 1 maiúscula, 1 minúscula, 1 dígito e 1 caractere especial (`!@#$%^&*()-_+=`)
+- **Preço do jogo**: deve ser positivo
+- **Promoções**: sem sobreposição de datas para o mesmo jogo; desconto percentual ≤ 100%
+
+## Como executar os testes
+
+```bash
+cd src
+dotnet test
+```
+
+## Linguagem Ubíqua
 
 ### Entidades e Agregados
 
-| Termo | Definição | Representação no código|
-|--------|--------------------|---------------------------------|
-| Usuário| Indíviduo apto a consumir ou administrar jogos na plataforma | User |
-| Jogo   | Conteúdo interativo digital | Game |
-| Biblioteca | Acervo de jogos adquiridos pelo jogador | UserGameLibrary |
-| Papel | Define os níveis de autoridade de um usuário | Role |
+| Termo | Definição | Código |
+|-------|-----------|--------|
+| Usuário | Indivíduo apto a consumir ou administrar jogos na plataforma | `User` |
+| Jogo | Conteúdo interativo digital disponível para aquisição | `Game` |
+| Biblioteca | Acervo de jogos adquiridos pelo jogador | `UserOwnedGame` |
+| Papel | Define o nível de autoridade de um usuário | `Role` |
+| Promoção | Desconto temporário aplicado a um jogo | `GamePromotion` |
 
 ### Objetos de Valor
 
-| Representação no código | Definição |
-|--------|--------------------|
-| Id | Guid utilizado na criação de qualquer entidade |
-| Name | Nome do usuário |
-| Email| Endereço de e-mail utilizado no cadastro do usuário |
-| Password | Senha de acesso do usuário, deve conter 8 dígitos e ao menos um dos caracteres especiais "!@#$%^&*()-_+="|
-| Price | Representa o custo do jogo; nunca pode ser um valor negativo |
+| Código | Definição |
+|--------|-----------|
+| `Name` | Nome do usuário |
+| `Email` | Endereço de e-mail (normalizado para lowercase) |
+| `Password` | Validador de complexidade de senha |
+| `GameTitle` | Título do jogo |
+| `Price` | Valor monetário do jogo (nunca negativo) |
 
-### Dicionário de Estados (Enums)
+### Enums
 
-- RoleType: Define o nível de acesso do User
-  * User
-  * Administrator
-
-- GameGenre: Define o gênero do Game
-  * Action
-  * RPG
-  * Strategy
-  * Sports
-  * Puzzle
-  * Other
- 
-- GameStatus: Define o status do Game
-  * Active (Ativo)
-  * Inactive (Inativo)
-  * ComingSoon (Em breve)
-  
-  
+- **RoleType**: `User`, `Administrator`
+- **GameGenre**: `Action`, `RPG`, `Strategy`, `Sports`, `Puzzle`, `Other`
+- **GameStatus**: `Active`, `Inactive`, `ComingSoon`
+- **DiscountType**: `Percentage`, `FixedValue`
