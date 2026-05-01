@@ -6,8 +6,16 @@ using FCG.Infrastructure.DependencyInjection;
 using FCG.Infrastructure.Persistence;
 using FCG.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, loggerConfig) =>
+    loggerConfig
+        .ReadFrom.Configuration(context.Configuration)
+        .Enrich.FromLogContext()
+        .WriteTo.Console(outputTemplate:
+            "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}"));
 
 builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -20,6 +28,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment()) app.UseSwaggerConfig();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseSerilogRequestLogging();
 
 app.UseAuthentication();
 app.UseAuthorization();
