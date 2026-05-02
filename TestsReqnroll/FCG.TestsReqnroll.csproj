@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ReqnrollFeatureFiles Remove="Features\API\User.feature" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Features\API\Endpoints\User.feature" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="8.9.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.7" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="Reqnroll.xUnit" Version="3.2.0" />
+    <PackageReference Include="SpecFlow" Version="3.9.74" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Drivers\" />
+    <Folder Include="Features\Application\Auth\UseCases\" />
+    <Folder Include="Features\Application\Games\UseCases\" />
+    <Folder Include="Features\Application\Users\UseCases\" />
+    <Folder Include="Features\Infrastructure\Security\" />
+    <Folder Include="Features\Infrastructure\Persistence\" />
+    <Folder Include="Features\Domain\ValueObjects\" />
+    <Folder Include="Features\Domain\Services\" />
+    <Folder Include="Features\Domain\Policies\" />
+    <Folder Include="Support\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\FCG.API\FCG.API.csproj" />
+    <ProjectReference Include="..\src\FCG.Application\FCG.Application.csproj" />
+    <ProjectReference Include="..\src\FCG.Domain\FCG.Domain.csproj" />
+    <ProjectReference Include="..\src\FCG.Infrastructure\FCG.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

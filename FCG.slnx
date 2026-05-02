@@ -5,5 +5,6 @@
         <Project Path="src/FCG.Domain/FCG.Domain.csproj" />
         <Project Path="src/FCG.Infrastructure/FCG.Infrastructure.csproj" />
         <Project Path="src/FCG.Tests/FCG.Tests.csproj" />
+        <Project Path="TestsReqnroll/FCG.TestsReqnroll.csproj" Id="a2a2856c-a533-4f7f-b5f6-78d86abdcd5b" />
     </Folder>
 </Solution>
